@@ -19,8 +19,10 @@ var id : int = 0
 # Returns a task which resolves to the contents of the response.
 func send_async(p_method : String, p_uri : String, p_headers : Dictionary, p_body : PoolByteArray, p_timeout : int = 3):
 	var req = HTTPRequest.new()
-	if OS.get_name() != 'HTML5':
-		req.use_threads = true # Threads not available nor needed on the web.
+	
+	# threads means a thread::join() in cancel_request().  This can block our main thread :(
+	#if OS.get_name() != 'HTML5':
+	#	req.use_threads = true # Threads not available nor needed on the web.
 
 	# Parse method
 	var method = HTTPClient.METHOD_GET
