@@ -101,7 +101,7 @@ static func _send_async(request : HTTPRequest, p_uri : String, p_headers : PoolS
 		logger.debug("Unable to parse request %d response. JSON error: %d, response code: %d" % [
 			p_id, json.error, response_code
 		])
-		return NakamaException.new("Failed to decode JSON response", response_code)
+		return NakamaException.new("Failed to decode JSON response:\n%s" % [response_string], response_code)
 
 	if response_code != HTTPClient.RESPONSE_OK:
 		var error = ""
