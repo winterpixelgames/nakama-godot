@@ -4,6 +4,8 @@ extends Node
 # An adapter which implements the HTTP protocol.
 class_name NakamaHTTPAdapter
 
+signal http_request_failed(exception, url) # (exception:NakamaException, url:String)
+
 # The logger to use with the adapter.
 var logger : Reference = NakamaLogger.new()
 
@@ -50,7 +52,10 @@ func send_async(p_method : String, p_uri : String, p_headers : Dictionary, p_bod
 	])
 
 	add_child(req)
-	return _send_async(req, p_uri, headers, method, p_body, id, _pending, logger)
+	var result = yield(_send_async(req, p_uri, headers, method, p_body, id, _pending, logger), "completed")
+	if result is NakamaException:
+		emit_signal("http_request_failed", result, p_uri)
+	return result
 
 func _process(delta):
 	# Handle timeout for 3.1 compatibility

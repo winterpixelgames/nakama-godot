@@ -5,6 +5,8 @@ class_name NakamaClient
 
 const ChannelType = NakamaRTMessage.ChannelJoin.ChannelType
 
+signal http_request_failed(exception, url) # (exception:NakamaException, url:String)
+
 func _no_set(_p):
 	return
 
@@ -44,6 +46,10 @@ func _init(p_adapter : NakamaHTTPAdapter,
 	timeout = p_timeout
 	logger = p_adapter.logger
 	_api_client = NakamaAPI.ApiClient.new(scheme + "://" + host + ":" + str(port), p_adapter, NakamaAPI, p_timeout)
+	p_adapter.connect("http_request_failed", self, "on_http_request_failed")
+
+func on_http_request_failed(exception:NakamaException, url:String):
+	emit_signal("http_request_failed", exception, url)
 
 # Restore a session from the auth token.
 # A `null` or empty authentication token will return `null`.
