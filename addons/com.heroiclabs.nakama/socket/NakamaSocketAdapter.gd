@@ -58,13 +58,9 @@ func _process(delta):
 			emit_signal("received_error", ERR_TIMEOUT)
 			_ws.disconnect_from_host()
 		else:
-			print("nakama poll 1")
 			_ws.poll()
-			print("nakama poll 2")
 	if _ws.get_connection_status() != WebSocketClient.CONNECTION_DISCONNECTED:
-		print("nakama poll 3")
 		_ws.poll()
-		print("nakama poll 4")
 
 func _init():
 	_ws.connect("data_received", self, "_received")
