@@ -4,6 +4,8 @@ extends Node
 # An adapter which implements the HTTP protocol.
 class_name NakamaHTTPAdapter
 
+signal http_request_failed(exception, url) # (exception:NakamaException, url:String)
+
 # The logger to use with the adapter.
 var logger : Reference = NakamaLogger.new()
 
@@ -136,9 +138,11 @@ class AsyncRequest:
 # Returns a task which resolves to the contents of the response.
 func send_async(p_method : String, p_uri : String, p_headers : Dictionary, p_body : PoolByteArray):
 	var req = HTTPRequest.new()
+	
 	req.timeout = timeout
-	if OS.get_name() != 'HTML5':
-		req.use_threads = true # Threads not available nor needed on the web.
+	# threads means a thread::join() in cancel_request().  This can block our main thread :(
+	#if OS.get_name() != 'HTML5':
+	#	req.use_threads = true # Threads not available nor needed on the web.
 
 	# Parse method
 	var method = HTTPClient.METHOD_GET
@@ -197,4 +201,9 @@ static func _send_async(p_id : int, p_pending : Dictionary):
 		yield(req.retry(), "completed")
 
 	_clear_request(req, p_pending, p_id)
-	return req.parse_result()
+
+	var parse_result = req.parse_result()
+	if req.result != HTTPRequest.RESULT_SUCCESS:
+		emit_signal("http_request_failed", parse_result, req.uri)
+
+	return parse_result
