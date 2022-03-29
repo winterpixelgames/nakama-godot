@@ -172,7 +172,10 @@ func send_async(p_method : String, p_uri : String, p_headers : Dictionary, p_bod
 
 	add_child(req)
 
-	return _send_async(id, _pending)
+	var parse_result = _send_async(id, _pending)
+	if parse_result is NakamaException:
+		emit_signal("http_request_failed", parse_result, p_uri)
+	return parse_result
 
 func get_last_token():
 	return id
@@ -202,8 +205,4 @@ static func _send_async(p_id : int, p_pending : Dictionary):
 
 	_clear_request(req, p_pending, p_id)
 
-	var parse_result = req.parse_result()
-	if req.result != HTTPRequest.RESULT_SUCCESS:
-		emit_signal("http_request_failed", parse_result, req.uri)
-
-	return parse_result
+	return req.parse_result()
