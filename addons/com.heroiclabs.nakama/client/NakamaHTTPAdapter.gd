@@ -172,7 +172,7 @@ func send_async(p_method : String, p_uri : String, p_headers : Dictionary, p_bod
 
 	add_child(req)
 
-	var parse_result = _send_async(id, _pending)
+	var parse_result = yield(_send_async(id, _pending), "completed")
 	if parse_result is NakamaException:
 		emit_signal("http_request_failed", parse_result, p_uri)
 	return parse_result

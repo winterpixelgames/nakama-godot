@@ -3289,7 +3289,7 @@ class ApiClient extends Reference:
 	var _http_adapter
 	var _namespace : GDScript
 	var _server_key : String
-	var auto_refresh := true
+	var auto_refresh := false
 	var auto_refresh_time := 300
 	var auto_retry : bool setget _set_retry, _get_retry
 	var auto_retry_count : int setget _set_retry_count, _get_retry_count
