@@ -833,7 +833,7 @@ class PartyData extends NakamaAsyncResult:
 	static func get_result_key() -> String:
 		return "party_data"
 
-# End a party, kicking all party members and closing it. (this is both a message and a result)
+# This party has been closed, or you've been kicked.
 class PartyClose extends NakamaAsyncResult:
 	const _SCHEMA = {
 		"party_id": {"name": "party_id", "type": TYPE_STRING, "required": true},
@@ -841,14 +841,11 @@ class PartyClose extends NakamaAsyncResult:
 	# Party ID to close.
 	var party_id : String
 
-	func _init(p_id : String):
-		party_id = p_id
+	func _init(p_ex = null).(p_ex):
+		pass
 
 	func serialize():
 		return NakamaSerializer.serialize(self)
-
-	func get_msg_key() -> String:
-		return "party_close"
 
 	func _to_string():
 		if is_exception(): return get_exception()._to_string()

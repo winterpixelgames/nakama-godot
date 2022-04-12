@@ -624,3 +624,26 @@ class PartyDataSend extends NakamaAsyncResult:
 
 	func _to_string():
 		return "PartyDataSend<party_id=%s, op_code=%d, data=%s>" % [party_id, op_code, data]
+
+# End a party, kicking all party members and closing it.
+class PartyCloseSend extends NakamaAsyncResult:
+	const _SCHEMA = {
+		"party_id": {"name": "party_id", "type": TYPE_STRING, "required": true},
+	}
+	# Party ID to close.
+	var party_id : String
+
+	func _init(p_id : String):
+		party_id = p_id
+
+	func serialize():
+		return NakamaSerializer.serialize(self)
+
+	func get_msg_key() -> String:
+		return "party_close"
+
+	func _to_string():
+		return "PartyCloseSend<party_id=%s>" % [party_id]
+
+	static func create(p_ns : GDScript, p_dict : Dictionary) -> PartyCloseSend:
+		return _safe_ret(NakamaSerializer.deserialize(p_ns, "PartyCloseSend", p_dict), PartyCloseSend) as PartyCloseSend
