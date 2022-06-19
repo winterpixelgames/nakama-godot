@@ -441,7 +441,7 @@ class MatchmakerUser extends NakamaAsyncResult:
 class Status extends NakamaAsyncResult:
 
 	const _SCHEMA = {
-		"presences": {"name": "presences", "type": TYPE_ARRAY, "required": true, "content": "UserPresence"},
+		"presences": {"name": "presences", "type": TYPE_ARRAY, "required": false, "content": "UserPresence"},
 	}
 
 	# The status events for the users followed.
