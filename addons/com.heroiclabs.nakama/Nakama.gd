@@ -22,6 +22,13 @@ const DEFAULT_LOG_LEVEL = NakamaLogger.LOG_LEVEL.DEBUG
 var _http_adapter = null
 var logger = NakamaLogger.new()
 
+# Winterpixel added
+# Caching these GDScripts ensures they are only parsed once.
+# Otherwise, they are parsed and disposed of many times.
+var rt_api_script:GDScript = preload("res://moonlight/nakama-godot/addons/com.heroiclabs.nakama/api/NakamaRTAPI.gd")
+var api_script:GDScript = preload("res://moonlight/nakama-godot/addons/com.heroiclabs.nakama/api/NakamaAPI.gd")
+var rt_message_script:GDScript = preload("res://moonlight/nakama-godot/addons/com.heroiclabs.nakama/api/NakamaRTMessage.gd")
+
 func _ready() -> void:
 	Nakama.pause_mode = Node.PAUSE_MODE_PROCESS
 
