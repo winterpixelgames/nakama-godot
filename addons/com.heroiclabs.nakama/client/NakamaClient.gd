@@ -22,6 +22,9 @@ var port : int setget _no_set
 # The protocol scheme used to connect with the server. Must be either "http" or "https".
 var scheme : String setget _no_set
 
+# Added by winterpixel to allow hosting nakama at a non root path on a host
+var path_prefix : String setget _no_set
+
 # The key used to authenticate with the server without a session. Defaults to "defaultkey".
 var server_key : String = "defaultkey" setget _no_set
 
@@ -78,6 +81,7 @@ func cancel_request(p_token):
 func _init(p_adapter : NakamaHTTPAdapter,
 		p_server_key : String,
 		p_scheme : String,
+		p_path_prefix : String,
 		p_host : String,
 		p_port : int,
 		p_timeout : int):
@@ -86,9 +90,14 @@ func _init(p_adapter : NakamaHTTPAdapter,
 	scheme = p_scheme
 	host = p_host
 	port = p_port
+	path_prefix = p_path_prefix
+	if not path_prefix.begins_with("/"):
+		path_prefix = "/" + path_prefix
 	timeout = p_timeout
 	logger = p_adapter.logger
-	_api_client = NakamaAPI.ApiClient.new(scheme + "://" + host + ":" + str(port), p_adapter, NakamaAPI, server_key, p_timeout)
+	var base_uri : String = "%s://%s:%d%s" % [scheme, host, port, path_prefix]
+	print("[NakamaClient] connecting to '%s'" % [base_uri])
+	_api_client = NakamaAPI.ApiClient.new(base_uri, p_adapter, NakamaAPI, server_key, p_timeout)
 	p_adapter.connect("http_request_failed", self, "on_http_request_failed")
 
 func on_http_request_failed(exception:NakamaException, url:String):

@@ -90,6 +90,7 @@ func _init(p_adapter : NakamaSocketAdapter,
 		p_host : String,
 		p_port : int,
 		p_scheme : String,
+		p_path_prefix : String,
 		p_free_adapter : bool = false):
 	logger = p_adapter.logger
 	_adapter = p_adapter
@@ -97,7 +98,11 @@ func _init(p_adapter : NakamaSocketAdapter,
 	var port = ""
 	if (p_scheme == "ws" and p_port != 80) or (p_scheme == "wss" and p_port != 443):
 		port = ":%d" % p_port
-	_base_uri = "%s://%s%s" % [p_scheme, p_host, port]
+	var path_prefix = p_path_prefix
+	if not path_prefix.begins_with("/"):
+		path_prefix = "/" + path_prefix
+	_base_uri = "%s://%s%s%s" % [p_scheme, p_host, port, p_path_prefix]
+	print("[NakamaSocket] connecting to '%s'" % [_base_uri])
 	_free_adapter = p_free_adapter
 	_adapter.connect("closed", self, "_closed")
 	_adapter.connect("connected", self, "_connected")
