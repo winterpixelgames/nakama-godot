@@ -91,7 +91,7 @@ func _init(p_adapter : NakamaHTTPAdapter,
 	host = p_host
 	port = p_port
 	path_prefix = p_path_prefix
-	if not path_prefix.begins_with("/"):
+	if not path_prefix.begins_with("/") and not path_prefix.empty():
 		path_prefix = "/" + path_prefix
 	timeout = p_timeout
 	logger = p_adapter.logger
