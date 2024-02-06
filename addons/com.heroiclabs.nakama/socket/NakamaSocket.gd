@@ -99,7 +99,7 @@ func _init(p_adapter : NakamaSocketAdapter,
 	if (p_scheme == "ws" and p_port != 80) or (p_scheme == "wss" and p_port != 443):
 		port = ":%d" % p_port
 	var path_prefix = p_path_prefix
-	if not path_prefix.begins_with("/"):
+	if not path_prefix.begins_with("/") and not path_prefix.empty():
 		path_prefix = "/" + path_prefix
 	_base_uri = "%s://%s%s%s" % [p_scheme, p_host, port, p_path_prefix]
 	print("[NakamaSocket] connecting to '%s'" % [_base_uri])
