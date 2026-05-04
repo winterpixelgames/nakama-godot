@@ -28,6 +28,7 @@ var logger = NakamaLogger.new()
 var rt_api_script:GDScript = preload("res://moonlight/nakama-godot/addons/com.heroiclabs.nakama/api/NakamaRTAPI.gd")
 var api_script:GDScript = preload("res://moonlight/nakama-godot/addons/com.heroiclabs.nakama/api/NakamaAPI.gd")
 var rt_message_script:GDScript = preload("res://moonlight/nakama-godot/addons/com.heroiclabs.nakama/api/NakamaRTMessage.gd")
+var http_adapter_script:GDScript = preload("res://moonlight/nakama-godot/addons/com.heroiclabs.nakama/client/NakamaHTTPAdapter.gd")
 
 func _ready() -> void:
 	Nakama.pause_mode = Node.PAUSE_MODE_PROCESS

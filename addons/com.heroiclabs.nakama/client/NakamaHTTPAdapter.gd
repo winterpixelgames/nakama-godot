@@ -184,13 +184,13 @@ func cancel_request(p_token):
 	if _pending.has(p_token):
 		_pending[p_token].cancel()
 
-static func _clear_request(p_request : AsyncRequest, p_pending : Dictionary, p_id : int):
+func _clear_request(p_request : AsyncRequest, p_pending : Dictionary, p_id : int):
 	if not p_request.request.is_queued_for_deletion():
 		p_request.logger.debug("Freeing request %d" % p_id)
 		p_request.request.queue_free()
 		p_pending.erase(p_id)
 
-static func _send_async(p_id : int, p_pending : Dictionary):
+func _send_async(p_id : int, p_pending : Dictionary):
 
 	var req : AsyncRequest = p_pending[p_id]
 	yield(req.make_request(), "completed")
